@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    알람 팝업하기 => <input @click="sendAlarm" type="button" value="RequestAlarm">
+    알람 팝업하기 => <input @click="alarm" type="button" value="RequestAlarm">
     유저이름 : <input v-model="userName" type="text">
     내용 : <input v-model="message" type="text" @keyup="sendMessage">
     <hr>
-    <div v-for="(item, idx) in recvList" :key="idx">
+    <div v-for="(item, idx) in recvList" :key="idx" id="chatBox">
       <h3 >{{item.userName}} :: {{item.content}}</h3>
     </div>
-<!--    <input type="button" value="disconnect" @click="disConnect">-->
+    <hr>
+    <input type="button" value="disconnect" @click="disConnect">
+    <input type="button" value="connect" @click="connect">
     <div >
-        <div v-for="a,idxx in typeofAlarm" :key="idxx">
-            {{a}}
-        </div>
+      <h3> {{this.typeofAlarm}} </h3>
     </div>
   </div>
 </template>
@@ -38,6 +38,15 @@ export default {
     this.connect()
   },
   methods: {
+    alarm() {
+      if(this.stompClient && this.stompClient.connected) {
+        const msg = {
+          alarm: 'get alarm'
+        }
+        this.stompClient.send("/alarm", JSON.stringify(msg), {})
+      }
+    },
+
     sendMessage(e) {
       if(e.keyCode === 13 && this.userName.trim() !== '' && this.message.trim() !== '') {
         this.send()
@@ -45,61 +54,43 @@ export default {
       }
     },
     send() {
+      if(this.stompClient && this.stompClient.connected) {
         const msg = {
           userName: this.userName,
           content: this.message
         }
         this.stompClient.send("/receive", JSON.stringify(msg), {})
-    },
-
-    sendAlarm(){
-        const alram = {
-          typeofAlarm : '알람 곱게 받아라잉'
-        }
-        this.stompClient.send("/receiveAlarm", JSON.stringify(alram), {})
+      }
     },
 
 
     connect() {
       const serverURL = "http://localhost:9000/"
       let socket = new SockJS(serverURL)
-      let message = "message"
       this.stompClient = Stomp.over(socket)
       // SockJs와 stomp.js를 사용하여 SockJS 서버가 연결을 기다리는 곳에 연결한다.
       this.stompClient.connect(
-          {message},
+          {},
           frame => {
             this.connected = true
             console.log(frame)
-            this.stompClient.subscribe("/send", res => {
-              this.recvList.push(JSON.parse(res.body))
+            this.stompClient.subscribe("/send", alarmRes => {
+              console.log("알람 내용 =>>>>", JSON.parse(alarmRes.body))
+              this.typeofAlarm = JSON.parse(alarmRes.body)
             })
-
           },
           error => {
             console.log(error)
             this.connected = false
           }
       )
-      let alarm = "alarm"
-      this.stompClient.connect(
-          {alarm},
-          frame => {
-            this.connected = true
-            console.log(frame)
-            this.stompClient.subscribe("/alarm", alarmRes => {
-              console.log("알람 내용 =>>>>", JSON.parse(alarmRes.body))
-              this.typeofAlarm = JSON.parse(alarmRes.body)
-            })
-          },
-          error => {
-            console.log('alarm error => ', error)
-            this.connected = false
-          }
-      )
+
     },
     disConnect(){
       if(this.stompClient != null){
+        let chatBox = document.querySelector('#chatBox')
+        console.log(chatBox)
+        chatBox.innerHTML = ''
         this.stompClient.disconnect()
       }
       console.log('disConnected')

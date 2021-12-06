@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class SocketVO {
     private String userName;
     private String content;
+    private String alarm;
 }

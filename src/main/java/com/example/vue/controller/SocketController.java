@@ -1,6 +1,5 @@
 package com.example.vue.controller;
 
-import com.example.vue.vo.AlarmVO;
 import com.example.vue.vo.SocketVO;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -12,12 +11,12 @@ public class SocketController {
     @MessageMapping("/receive")
     @SendTo("/send")
     public SocketVO socketHandler(SocketVO socketVO) {
-        return new SocketVO(socketVO.getUserName(), socketVO.getContent());
+        return new SocketVO(socketVO.getUserName(), socketVO.getContent(), socketVO.getAlarm());
     }
 
-    @MessageMapping("/receiveAlarm")
-    @SendTo("/alarm")
-    public AlarmVO alramHandler(AlarmVO alramVO){
-        return new AlarmVO(alramVO.getTypeofAlarm());
+    @MessageMapping("/alarm")
+    @SendTo("/send")
+    public SocketVO alarmHandler(SocketVO socketVO) {
+        return new SocketVO(socketVO.getUserName(), socketVO.getContent(), socketVO.getAlarm());
     }
 }
