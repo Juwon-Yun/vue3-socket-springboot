@@ -5,14 +5,16 @@
     내용 : <input v-model="message" type="text" @keyup="sendMessage">
     <hr>
     <div v-for="(item, idx) in recvList" :key="idx" id="chatBox">
-      <h3 >{{item.userName}} :: {{item.content}}</h3>
+      <h3 v-if="item.userName !==null && item.content !== null">
+        {{item.userName}} : {{item.content}}
+      </h3>
+      <h3 v-if="item.alarm !== null">
+        {{item.alarm}}
+      </h3>
     </div>
     <hr>
     <input type="button" value="disconnect" @click="disConnect">
     <input type="button" value="connect" @click="connect">
-    <div >
-      <h3> {{this.typeofAlarm}} </h3>
-    </div>
   </div>
 </template>
 
@@ -31,7 +33,6 @@ export default {
       userName : "",
       message: "",
       recvList: [],
-      typeofAlarm : "",
     }
   },
   created() {
@@ -74,9 +75,14 @@ export default {
           frame => {
             this.connected = true
             console.log(frame)
-            this.stompClient.subscribe("/send", alarmRes => {
-              console.log("알람 내용 =>>>>", JSON.parse(alarmRes.body))
-              this.typeofAlarm = JSON.parse(alarmRes.body)
+            this.stompClient.subscribe("/send", res => {
+              console.log("소켓에서 수신한 내용 =>>>>", JSON.parse(res.body))
+              // for (let resKey of res) {
+              //   if(resKey.alarm != null){
+              //     this.recvList.push(JSON.parse(res.body))
+              //   }
+              // }
+              this.recvList.push(JSON.parse(res.body))
             })
           },
           error => {
