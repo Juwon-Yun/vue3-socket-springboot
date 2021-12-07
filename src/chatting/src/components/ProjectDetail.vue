@@ -2,7 +2,7 @@
   <div class="projectDetail-container">
     <Notice />
     <Chat />
-    projectDetail
+    <ChatAppOrigin/>
   </div>
 </template>
 
@@ -10,12 +10,14 @@
 
 import Notice from "@/components/Notice.vue";
 import Chat from "@/components/Chat.vue";
+import ChatAppOrigin from "@/components/ChatAppOrigin";
 import '../../public/reset.css'
 
 export default {
   components: {
     Notice,
     Chat,
+    ChatAppOrigin,
   },
 };
 </script>

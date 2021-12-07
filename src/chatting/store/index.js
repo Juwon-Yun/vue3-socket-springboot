@@ -29,13 +29,15 @@ import { createStore } from 'vuex'
 // import home from '@/store/modules/noAccess/home.js'
 // import sign from '@/store/modules/noAccess/sign.js'
 // import userQnA from '@/store/modules/noAccess/userQnA.js'
-//
+   import alarmAndChat from "./Modules/alarmandchat";
 
 
 
 
 const store = createStore({
+    namespace : true,
     modules: {
+        alarmAndChat,
         // adminQnA,
         // userList,
         // userProject,
