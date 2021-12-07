@@ -3,14 +3,14 @@
     <Notice />
     <Chat />
     projectDetail
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
 
-import Notice from "@/components/popup/Notice.vue";
-import Chat from "@/components/popup/Chat.vue";
+import Notice from "@/components/Notice.vue";
+import Chat from "@/components/Chat.vue";
+import '../../public/reset.css'
 
 export default {
   components: {
