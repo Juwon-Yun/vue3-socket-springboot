@@ -2,17 +2,18 @@
   <button
       style="
       position: absolute;
-      top: 30%;
+      top: 20%;
       right: 50%;
       background: #eee;
       width: 100px;
-      height: 100px;
+      height: 50px;
     "
       @click="chatTest"
   >
     채팅 테스트
   </button>
   <div class="chat-container">
+    <!--    채팅방-->
     <div
         class="chat-box"
         v-for="(chat, index) in chatData"
@@ -29,6 +30,7 @@
       </div>
       <div class="chat-content">
         <ul>
+        <!--          채팅 메세지들 -->
           <li
               class="chat-line"
               v-for="(line, index) in chat.content"
@@ -98,7 +100,9 @@ export default {
       this.inputText = e.target.value;
     },
     // 여기다가 메시지 받기 기능 추가 해야함!!!!!!!!!!!!!!!!!!!!
-    getMessage() {},
+    getMessage() {
+
+    },
     sendMessage(index) {
       let date = today.format("HH:MM");
 
@@ -132,10 +136,12 @@ export default {
     // 채팅 메시지 받기 테스트
     chatTest() {
       let date = today.format("HH:MM");
-      console.log("ss");
+      // console.log("ss");
       this.chatData[0].content.push({
-        id: "kade",
-        text: "머하냐~",
+        // id: "kade",
+        // text: "머하냐~",
+        id : this.$store.state.alarmAndChat.chat.userName,
+        text : this.$store.state.alarmAndChat.chat.message,
         img: "con1.jpg",
         date: date,
       });

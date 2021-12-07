@@ -4,27 +4,28 @@ const alarmAndChat = {
     state(){
         return{
             alarmColor : '',
-            userName : "",
-            message: "",
+            chat : {
+                userName : '초기값',
+                message : '초기값',
+            },
+            cnt: 0
         }
     },
     mutations : {
         setAlarmColor(state, color){
-            // console.log('color => ', color)
             state.alarmColor = color
         },
-
-        getAlarmColor(state){
-            console.log('get알ㄹ람', state.alarmColor)
-            return state.alarmColor
-        },
-
+        setChatting(state, arr){
+            console.log('arr =>>',arr)
+            state.chat.userName = arr.userName
+            state.chat.message = arr.content
+            console.log(state.chat)
+        }
     },
     actions : {
 
-
     },
-    
+
 }
 
 export default alarmAndChat;

@@ -38,31 +38,34 @@ export default {
       alarmState : '',
     }
   },
-  created() {
+  async created() {
     this.connect()
   },
   methods: {
     ...mapMutations({
-       setAlarmColor : 'alarmAndChat/setAlarmColor',
+      setAlarmColor : 'alarmAndChat/setAlarmColor',
+      setChatting : 'alarmAndChat/setChatting',
     }),
-
 
     alarm(color) {
       if(color !== null){
         if(this.stompClient && this.stompClient.connected) {
           const msg = {
-            alarm: color
+            alarm: color,
+            // member: sessionStorage.getItem("token")
           }
           this.stompClient.send("/alarm", JSON.stringify(msg), {})
         } // stomp if
       } // color if
     },
+
     sendMessage(e) {
       if(e.keyCode === 13 && this.userName.trim() !== '' && this.message.trim() !== '') {
         this.send()
         this.message = ''
       }
     },
+
     send() {
       if(this.stompClient && this.stompClient.connected) {
         const msg = {
@@ -72,7 +75,6 @@ export default {
         this.stompClient.send("/receive", JSON.stringify(msg), {})
       }
     },
-
 
     connect() {
       const serverURL = "http://localhost:9000/"
@@ -87,11 +89,19 @@ export default {
             this.stompClient.subscribe("/send", res => {
               console.log("소켓에서 수신한 내용 =>>>>", JSON.parse(res.body))
               let arr = JSON.parse(res.body)
+
+
+              // if(arr.member === sessionStorage.getItem("token") || this.$store.state.project.projectIdx !== sessionStorage.getItem("token").projectIdx) {
+              //   return
+              // }
+
               if(arr.alarm !== null && arr.alarm !== ''){
                 this.alarmState = arr.alarm
                 this.setAlarmColor(arr.alarm)
-              }else{
+                this.$store.state.alarmAndChat.cnt++
+              }else if((arr.userName !== null && arr.userName !== '') || arr.message !== null){
                 this.recvList.push(JSON.parse(res.body))
+                this.setChatting(arr)
               }
             })
           },
@@ -115,6 +125,9 @@ export default {
   watch : {
     alarmState(){
       console.log('socket.vue에서의 watch', this.alarmState)
+    },
+    '$store.state.alarmAndChat.cnt'() {
+
     }
   },
 }

@@ -3,7 +3,7 @@
   <button
       style="
         position: absolute;
-        top: 50%;
+        top: 30%;
         right: 50%;
         background: #eee;
         width: 100px;
@@ -11,7 +11,7 @@
       "
       @click="noticeTest"
   >
-    알람 테스트 
+    알람 테스트{{this.$store.state.alarmAndChat.cnt}}
   </button>
   <div class="notice-container">
     <div
@@ -58,6 +58,7 @@ export default {
   methods: {
     ...mapMutations({
       getAlarmColor : 'alarmAndChat/getAlarmColor',
+      setAlarmColor : 'alarmAndChat/setAlarmColor',
     }),
     closeNotice(index) {
       // console.log(index)
@@ -79,8 +80,13 @@ export default {
 
   },
   watch : {
-    // this.$store.state.alarmAndChat.alarmColor: function()
+    '$store.state.alarmAndChat.alarmColor'() {
+    },
+    '$store.state.alarmAndChat.cnt'() {
+      this.noticeTest()
+    }
   },
+
 };
 </script>
 
