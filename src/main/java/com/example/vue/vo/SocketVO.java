@@ -12,4 +12,5 @@ public class SocketVO {
     private String text;
     private String date;
     private String alarm;
+    private String textAreaText;
 }

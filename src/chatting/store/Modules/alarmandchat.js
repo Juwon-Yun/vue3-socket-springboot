@@ -20,6 +20,7 @@ const alarmAndChat = {
             alarmCnt: 0,
             chatCnt : 0,
             receiveChatCnt : 0,
+            textArea_text : '',
         }
     },
     mutations : {
@@ -34,11 +35,15 @@ const alarmAndChat = {
             // console.log('state => ',state.chat)
         },
         serReceivedChatting(state,arr){
-            console.log('arr => ',arr)
+            // console.log('arr => ',arr)
             state.receivedChat.id = arr.id
             state.receivedChat.text = arr.text
             state.receivedChat.date = arr.date
-            console.log('state => ', state.receivedChat)
+            // console.log('state => ', state.receivedChat)
+        },
+        setTextArea_Text(state, text){
+            state.textArea_text += text
+            console.log('state에서의 => ',state.textArea_text)
         },
         increaseAlarmCnt(state){
             state.alarmCnt++
@@ -46,7 +51,7 @@ const alarmAndChat = {
         increaseChatCnt(state){
             state.chatCnt++
         },
-        increasereceiveChatCnt(state){
+        increaseReceiveChatCnt(state){
             state.receiveChatCnt++
         },
     },

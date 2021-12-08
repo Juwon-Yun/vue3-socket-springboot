@@ -17,6 +17,9 @@
     <hr>
     <input type="button" value="disconnect" @click="disConnect">
     <input type="button" value="connect" @click="connect">
+    <hr>
+    <textarea name="" class="txtArea" cols="80" rows="30"
+       v-model="this.textArea_text" @keyup="sendTextArea"></textarea>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
       text: "",
       recvList: [],
       alarmState : '',
+      textArea_text: '',
     }
   },
   async created() {
@@ -49,7 +53,8 @@ export default {
       setSendChatting : 'alarmAndChat/setSendChatting',
       increaseAlarmCnt : 'alarmAndChat/increaseAlarmCnt',
       serReceivedChatting : 'alarmAndChat/serReceivedChatting',
-      increasereceiveChatCnt : 'alarmAndChat/increasereceiveChatCnt',
+      increaseReceiveChatCnt : 'alarmAndChat/increaseReceiveChatCnt',
+      setTextArea_Text : 'alarmAndChat/setTextArea_Text',
     }),
 
     alarm(color) {
@@ -62,6 +67,18 @@ export default {
           this.stompClient.send("/alarm", JSON.stringify(msg), {})
         } // stomp if
       } // color if
+    },
+
+    sendTextArea(){
+      if(this.stompClient && this.stompClient.connected){
+        let arr_textAreaText = {
+          textAreaText : '',
+        }
+        arr_textAreaText.textAreaText = this.textArea_text
+        this.stompClient.send('/receive', JSON.stringify(arr_textAreaText), {})
+        // this.textArea_text = ''
+      }
+        // this.textArea_text = ''
     },
 
     sendMessage(e) {
@@ -84,6 +101,7 @@ export default {
     },
 
     connect() {
+  
       const serverURL = "http://192.168.0.8:9000/"
       let socket = new SockJS(serverURL)
       this.stompClient = Stomp.over(socket)
@@ -96,19 +114,24 @@ export default {
             this.stompClient.subscribe("/send", res => {
               console.log("소켓에서 수신한 내용 =>>>>", JSON.parse(res.body))
               let arr = JSON.parse(res.body)
+              
               // if(arr.member === sessionStorage.getItem("token") || this.$store.state.project.projectIdx !== sessionStorage.getItem("token").projectIdx) {
               //   return
               // }
-              if(arr.alarm !== null && arr.alarm !== ''){
+              if(arr.alarm !== null && arr.alarm !== '' && arr.textAreaText === null){
                 this.alarmState = arr.alarm
                 this.setAlarmColor(arr.alarm)
                 // this.$store.state.alarmAndChat.alarmCnt++
                 this.increaseAlarmCnt()
-              }else if((arr.userName !== null && arr.userName !== '') || arr.message !== null && arr.message !== ''){
+              }else if(arr.userName !== null && arr.userName !== '' && arr.message !== null && arr.message !== '' && arr.textAreaText === null){
                 this.recvList.push(JSON.parse(res.body))
-                // receive로 바꾸고 watch 이벤트 발생시켜야함
                 this.serReceivedChatting(arr)
-                this.increasereceiveChatCnt()
+                // increase말고 내용( 배열 변수 )을 바꿧을 때 watch 발동이 될까?
+                this.increaseReceiveChatCnt()
+              }else if(arr.textAreaText != null){
+                // console.log('=> ', arr.textAreaText)
+                this.textArea_text = arr.textAreaText
+                // this.setTextArea_Text(arr.textAreaText)
               }
             })
           },

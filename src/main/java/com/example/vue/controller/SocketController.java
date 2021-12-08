@@ -11,13 +11,21 @@ public class SocketController {
     @MessageMapping("/receive")
     @SendTo("/send")
     public SocketVO socketHandler(SocketVO socketVO) {
-        return new SocketVO(socketVO.getId(), socketVO.getText(), socketVO.getDate(), socketVO.getAlarm());
+        return new SocketVO(socketVO.getId()
+                          , socketVO.getText()
+                          , socketVO.getDate()
+                          , socketVO.getAlarm()
+                          , socketVO.getTextAreaText());
     }
 
     @MessageMapping("/alarm")
     @SendTo("/send")
     public SocketVO alarmHandler(SocketVO socketVO) {
-        return new SocketVO(socketVO.getId(), socketVO.getText(),socketVO.getDate(), socketVO.getAlarm());
+        return new SocketVO(socketVO.getId()
+                          , socketVO.getText()
+                          , socketVO.getDate()
+                          , socketVO.getAlarm()
+                          , socketVO.getTextAreaText());
     }
 
 }
