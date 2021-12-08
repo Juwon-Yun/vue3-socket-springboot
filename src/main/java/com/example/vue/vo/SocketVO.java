@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SocketVO {
-    private String userName;
-    private String content;
+    private String id;
+    private String text;
+    private String date;
     private String alarm;
 }

@@ -79,6 +79,7 @@
 
 <script>
 import chatData from "@/assets/chatData.js";
+import { mapMutations } from 'vuex';
 const moment = require("moment");
 const today = moment();
 
@@ -96,6 +97,10 @@ export default {
     };
   },
   methods: {
+    ...mapMutations({
+      setSendChatting : 'alarmAndChat/setSendChatting',
+      increaseChatCnt : 'alarmAndChat/increaseChatCnt',
+    }),
     setText(e) {
       this.inputText = e.target.value;
     },
@@ -111,7 +116,11 @@ export default {
           id: this.userId,
           text: this.inputText,
           date: date,
+          img : this.img,
         });
+        let contentLength = this.chatData[index].content.length;
+        this.setSendChatting(this.chatData[index].content[contentLength-1])
+        this.increaseChatCnt()
       }
       document.querySelector(`#chat-input-${index}`).value = "";
       this.inputText = "";
@@ -135,17 +144,22 @@ export default {
     },
     // 채팅 메시지 받기 테스트
     chatTest() {
-      let date = today.format("HH:MM");
+      // let date = today.format("HH:MM");
       // console.log("ss");
       this.chatData[0].content.push({
         // id: "kade",
         // text: "머하냐~",
-        id : this.$store.state.alarmAndChat.chat.userName,
-        text : this.$store.state.alarmAndChat.chat.message,
+        id : this.$store.state.alarmAndChat.receivedChat.id,
+        text : this.$store.state.alarmAndChat.receivedChat.text,
         img: "con1.jpg",
-        date: date,
+        date: this.$store.state.alarmAndChat.receivedChat.date,
       });
     },
+  },
+  watch : {
+    '$store.state.alarmAndChat.receiveChatCnt'(){
+      this.chatTest()
+    },  
   },
 };
 </script>

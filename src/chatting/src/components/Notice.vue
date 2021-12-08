@@ -82,9 +82,9 @@ export default {
   watch : {
     '$store.state.alarmAndChat.alarmColor'() {
     },
-    '$store.state.alarmAndChat.cnt'() {
+    '$store.state.alarmAndChat.alarmCnt'() {
       this.noticeTest()
-    }
+    },
   },
 
 };

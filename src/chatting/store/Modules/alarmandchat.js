@@ -4,23 +4,51 @@ const alarmAndChat = {
     state(){
         return{
             alarmColor : '',
-            chat : {
-                userName : '초기값',
-                message : '초기값',
+            sendChat : {
+                id : 'default',
+                text : 'default',
+                date : 'default',
+                // 이미지는 projectList(projects)에서 따로 받아와야한다 
+                img : '',
             },
-            cnt: 0
+            receivedChat : {
+                id : 'received',
+                text : 'received',
+                date : 'received',
+                img : '',
+            },
+            alarmCnt: 0,
+            chatCnt : 0,
+            receiveChatCnt : 0,
         }
     },
     mutations : {
         setAlarmColor(state, color){
             state.alarmColor = color
         },
-        setChatting(state, arr){
-            console.log('arr =>>',arr)
-            state.chat.userName = arr.userName
-            state.chat.message = arr.content
-            console.log(state.chat)
-        }
+        setSendChatting(state, arr){
+            // console.log('arr =>>',arr)
+            state.sendChat.id = arr.id
+            state.sendChat.text = arr.text
+            state.sendChat.date = arr.date
+            // console.log('state => ',state.chat)
+        },
+        serReceivedChatting(state,arr){
+            console.log('arr => ',arr)
+            state.receivedChat.id = arr.id
+            state.receivedChat.text = arr.text
+            state.receivedChat.date = arr.date
+            console.log('state => ', state.receivedChat)
+        },
+        increaseAlarmCnt(state){
+            state.alarmCnt++
+        },
+        increaseChatCnt(state){
+            state.chatCnt++
+        },
+        increasereceiveChatCnt(state){
+            state.receiveChatCnt++
+        },
     },
     actions : {
 
