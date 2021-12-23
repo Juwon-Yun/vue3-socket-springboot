@@ -64,6 +64,7 @@ export default {
             alarm: color,
             // member: sessionStorage.getItem("token")
           }
+          console.log('msg =>>>',msg)
           this.stompClient.send("/alarm", JSON.stringify(msg), {})
         } // stomp if
       } // color if

@@ -21,6 +21,7 @@ public class SocketController {
     @MessageMapping("/alarm")
     @SendTo("/send")
     public SocketVO alarmHandler(SocketVO socketVO) {
+        System.out.println(socketVO);
         return new SocketVO(socketVO.getId()
                           , socketVO.getText()
                           , socketVO.getDate()

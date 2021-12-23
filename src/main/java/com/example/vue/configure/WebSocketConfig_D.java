@@ -12,9 +12,10 @@ public class WebSocketConfig_D implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        System.out.println(registry);
 //        registry.enableSimpleBroker("/send").setSelectorHeaderName("header");
+//        registry.enableSimpleBroker("/send");
         registry.enableSimpleBroker("/send");
+        registry.setApplicationDestinationPrefixes("/pub");
     }
 
     @Override
